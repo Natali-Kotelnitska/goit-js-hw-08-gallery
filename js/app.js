@@ -95,14 +95,30 @@ function createGalleryMarkup(items) {
     .join('');
 }
 
+
 // 2. Реалізація делегування на галереї ul.js-gallery і отримання url великого зображення.
 galleryItemsContainer.addEventListener('click', onGalleryItemClick);
 
 
 function onGalleryItemClick(e) {
   console.log(e.target); 
-  console.log(e.target.dataset.source);
+  const mainPictureSource = e.target.dataset.source;
+  console.log(mainPictureSource);
 
+  // 3. Відкриття модального вікна при натисканні на елементі галереї.
+  
+  
+  // 4. Підміна значення атрибута src елемента img.lightbox\*\* image.
+  
+  // 5. Закриття модального вікна при натисканні на кнопку button[data - action= ""close - lightbox"].
+  
+// 6. Очищення значення атрибута src елемента img.lightbox\*\*image. Це необхідно для того, щоб при
+//    наступному відкритті модального вікна, поки вантажиться зображення, ми не бачили попереднє.
+
+
+  
+  
+  
 
   // const isGalleryItem = e.target.classList.contains('gallery__link');
   // if (!isGalleryItem) {
