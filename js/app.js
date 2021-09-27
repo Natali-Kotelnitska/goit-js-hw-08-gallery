@@ -94,6 +94,7 @@ function onOpenModalWindow(e) {
   if (e.target.nodeName !== 'IMG') {
     return;
   } else {
+    window.addEventListener('keydown', onEskKeyPress);
     modalWindowRef.classList.add('is-open');
     //   4. Підміна значення атрибута src елемента img.lightbox\*\* image.
     imageSourceRef.src = e.target.dataset.source;
@@ -104,6 +105,7 @@ function onOpenModalWindow(e) {
 //   5. Закриття модального вікна при натисканні на кнопку
 // button[data - action= ""close - lightbox"].
 function onCloseModalBtn(e) {
+  window.removeEventListener('keydown', onEskKeyPress);
   modalWindowRef.classList.remove('is-open');
   // 6. Очищення значення атрибута src елемента img.lightbox\*\*image. Це необхідно для того, щоб при
   //    наступному відкритті модального вікна, поки вантажиться зображення, ми не бачили попереднє.
@@ -111,9 +113,49 @@ function onCloseModalBtn(e) {
   imageSourceRef.alt = '';
 }
 
+// 7.(Додатково)Закриття модального вікна при натисканні на div.lightbox__overlay.
 function onCloseLightbox(event) {
   if (event.currentTarget === event.target) {
-    // console.log('click') - перевірка;
+    // console.log('click on overlay') - перевірка;
     onCloseModalBtn();
   }
+}
+
+// 8. Закриття модального вікна після натискання клавіші ESC.
+function onEskKeyPress(event) {
+  const isEscape = event.code === 'Escape';
+  if (isEscape) {
+    onCloseModalBtn();
+  }
+}
+
+// 9. Перегортування зображень галереї у відкритому модальному вікні клавішами "вліво"   і "вправо".
+const imagesDataSources = galleryItems.map(element => {
+  return element.original;
+});
+// console.log(imagesDataSources);
+
+document.addEventListener('keydown', e => {
+  const currentIndex = imagesDataSources.indexOf(imageSourceRef.src);
+  if (e.key === 'ArrowLeft') {
+    leftClick(currentIndex);
+  } else if (e.key === 'ArrowRight') {
+    rightClick(currentIndex);
+  }
+});
+
+function leftClick(currentIndex) {
+  let nextIndex = currentIndex - 1;
+  if (nextIndex === -1) {
+    nextIndex = imagesDataSources.length - 1;
+  }
+  imageSourceRef.src = imagesDataSources[nextIndex];
+}
+
+function rightClick(currentIndex) {
+  let nextIndex = currentIndex + 1;
+  if (nextIndex === imagesDataSources.length) {
+    nextIndex = 0;
+  }
+  imageSourceRef.src = imagesDataSources[nextIndex];
 }
